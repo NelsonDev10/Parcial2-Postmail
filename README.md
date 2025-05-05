@@ -16,7 +16,7 @@ npm install
 3. Asegúrate de tener un archivo `.env` con tu conexión de MongoDB Atlas, por ejemplo:
 
 ```env
-MONGODB_URI=mongodb+srv://usuario:contraseña@cluster.mongodb.net/Postmail?retryWrites=true&w=majority
+MONGODB_URI=mongodb+srv://nelsonjr:c4BXfQCk6AKc0VG8@cluster0.dwrj6n0.mongodb.net/Postmail?retryWrites=true&w=majority&appName=Cluster0
 PORT=3000
 ```
 
