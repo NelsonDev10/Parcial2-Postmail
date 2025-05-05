@@ -1,6 +1,8 @@
-# POSTMAIL API - Parcial 2 de Programación Orientada a Objetos
+# 📦 POSTMAIL API - Parcial 2 de Programación Orientada a Objetos
 
 Este proyecto consiste en una API REST para la gestión de envíos postales. Utiliza Node.js, Express y MongoDB, y aplica los pilares de la Programación Orientada a Objetos (POO): encapsulamiento, herencia, polimorfismo y abstracción.
+
+---
 
 ## 🚀 Instalación
 
@@ -14,7 +16,7 @@ npm install
 3. Asegúrate de tener un archivo `.env` con tu conexión de MongoDB Atlas, por ejemplo:
 
 ```env
-MONGODB_URI=mongodb+srv://usuario:contraseña@cluster.mongodb.net/Postmail?retryWrites=true&w=majority
+MONGODB_URI=mongodb+srv://nelsonjr:c4BXfQCk6AKc0VG8@cluster0.dwrj6n0.mongodb.net/Postmail?retryWrites=true&w=majority&appName=Cluster0
 PORT=3000
 ```
 
@@ -24,28 +26,20 @@ PORT=3000
 node app.js
 ```
 
-## 🧪 Endpoints de la API
-
-### 📦 Registrar producto
-**POST `/api/producto`**  
-Registra un nuevo producto disponible para envío.
-
-```bash
-curl -X POST http://localhost:3000/api/producto \
--H "Content-Type: application/json" \
--d '{"descripcion": "Libro de programación", "peso": 1.5, "bultos": 1, "fechaEntrega": "2025-05-10"}'
-```
-
 ---
 
-### ✉️ Registrar envío
-**POST `/api/envio`**  
-Registra un envío asociado a un cliente y un producto, y descuenta créditos del cliente.
+## 📡 Endpoints disponibles
 
-```bash
-curl -X POST http://localhost:3000/api/envio \
--H "Content-Type: application/json" \
--d '{"clienteId": "REEMPLAZAR_ID_CLIENTE", "productoId": "REEMPLAZAR_ID_PRODUCTO", "nombre": "Envio 1", "direccion": "Calle Falsa 123", "telefono": "12345678", "referencia": "Casa azul", "observacion": "Entregar en la mañana"}'
+### 🧍 Crear cliente con créditos
+**POST `/api/cliente`**  
+Registra un cliente con créditos iniciales según el plan seleccionado.
+
+#### Ejemplo:
+```json
+{
+  "nombre": "Nelson",
+  "plan": 1
+}
 ```
 
 ---
@@ -54,40 +48,12 @@ curl -X POST http://localhost:3000/api/envio \
 **GET `/api/creditos/:clienteId`**  
 Consulta cuántos créditos le quedan a un cliente.
 
-```bash
-curl http://localhost:3000/api/creditos/REEMPLAZAR_ID_CLIENTE
-```
-
----
-
-### 🗂️ Ver todos los envíos de un cliente
-**GET `/api/envios/:clienteId`**  
-Lista todos los envíos realizados por un cliente.
-
-```bash
-curl http://localhost:3000/api/envios/REEMPLAZAR_ID_CLIENTE
-```
-
----
-
-### ❌ Eliminar un envío
-**DELETE `/api/envio/:envioId`**  
-Elimina un envío específico y reembolsa los créditos al cliente.
-
-```bash
-curl -X DELETE http://localhost:3000/api/envio/REEMPLAZAR_ID_ENVIO
-```
-
----
-
-### 🧍 Crear cliente con créditos
-**POST `/api/cliente`**  
-Registra un cliente con créditos iniciales según el plan seleccionado.
-
-```bash
-curl -X POST http://localhost:3000/api/cliente \
--H "Content-Type: application/json" \
--d '{"nombre": "Nelson", "plan": 1}'
+#### Ejemplo de respuesta:
+```json
+{
+  "clienteId": "REEMPLAZAR_ID_CLIENTE",
+  "creditos": 30
+}
 ```
 
 ---
@@ -96,14 +62,105 @@ curl -X POST http://localhost:3000/api/cliente \
 **GET `/api/clientes`**  
 Muestra una lista completa de los clientes registrados con su información básica.
 
-```bash
-curl http://localhost:3000/api/clientes
+#### Ejemplo de respuesta:
+```json
+[
+  {
+    "id": "REEMPLAZAR_ID_CLIENTE",
+    "nombre": "Nelson",
+    "creditos": 30
+  }
+]
 ```
 
 ---
 
-## 🧠 Comentarios
+### 📦 Registrar producto
+**POST `/api/producto`**  
+Registra un nuevo producto disponible para envío.
 
-Cada endpoint aplica los principios de la POO. Se manejan modelos para `Cliente`, `Producto` y `Envio`, y todos los servicios están centralizados en `services/EnvioService.js`.
+#### Ejemplo:
+```json
+{
+  "descripcion": "Libro de programación",
+  "peso": 1.5,
+  "bultos": 1,
+  "fechaEntrega": "2025-05-10"
+}
+```
 
-📌 **Recuerda reemplazar `REEMPLAZAR_ID_CLIENTE`, `REEMPLAZAR_ID_PRODUCTO`, y `REEMPLAZAR_ID_ENVIO` por los valores reales que obtengas desde MongoDB.**
+---
+
+### ✉️ Registrar envío
+**POST `/api/envio`**  
+Registra un envío asociado a un cliente y un producto. Este endpoint descuenta créditos del cliente según el peso del producto.
+
+#### Ejemplo:
+```json
+{
+  "clienteId": "REEMPLAZAR_ID_CLIENTE",
+  "productoId": "REEMPLAZAR_ID_PRODUCTO",
+  "nombre": "Envio 1",
+  "direccion": "Calle Falsa 123",
+  "telefono": "12345678",
+  "referencia": "Casa azul",
+  "observacion": "Entregar en la mañana"
+}
+```
+
+---
+
+### 🗂️ Ver todos los envíos de un cliente
+**GET `/api/envios/:clienteId`**  
+Lista todos los envíos realizados por un cliente.
+
+#### Ejemplo de respuesta:
+```json
+[
+  {
+    "id": "REEMPLAZAR_ID_ENVIO",
+    "nombre": "Envio 1",
+    "direccion": "Calle Falsa 123",
+    "telefono": "12345678",
+    "referencia": "Casa azul",
+    "observacion": "Entregar en la mañana",
+    "costoEnvio": 1
+  }
+]
+```
+
+---
+
+### ❌ Eliminar un envío
+**DELETE `/api/envio/:envioId`**  
+Elimina un envío específico y reembolsa los créditos al cliente.
+
+#### Ejemplo de respuesta:
+```json
+{
+  "mensaje": "Envío eliminado exitosamente. Créditos reembolsados.",
+  "creditosRestantes": 30
+}
+```
+
+---
+
+## 🗂️ Estructura de carpetas
+
+```
+PARCIAL POO/
+│
+├── app.js                 # Archivo principal de la aplicación
+├── .env                   # Variables de entorno
+├── package.json           # Dependencias del proyecto
+├── README.md              # Documentación del proyecto
+├── models/                # Modelos de datos
+│   ├── Cliente.js         # Modelo para los clientes
+│   ├── Envio.js           # Modelo para los envíos
+│   └── Producto.js        # Modelo para los productos
+├── services/              # Servicios de la aplicación
+│   ├── dataBase.js        # Conexión a la base de datos
+│   └── EnvioService.js    # Lógica de negocio para los envíos
+```
+
+---
