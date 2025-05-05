@@ -34,6 +34,11 @@ node app.js
 **POST `/api/cliente`**  
 Registra un cliente con créditos iniciales según el plan seleccionado.
 
+#### Planes disponibles:
+- **Plan 1**: 30 créditos por $135.
+- **Plan 2**: 40 créditos por $160.
+- **Plan 3**: 60 créditos por $180.
+
 #### Ejemplo:
 ```json
 {
