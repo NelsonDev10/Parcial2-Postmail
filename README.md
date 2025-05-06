@@ -30,6 +30,37 @@ node app.js
 
 ## 📡 Endpoints disponibles
 
+### 🧍 Crear cliente con créditos
+**POST `/api/cliente`**  
+Registra un cliente con créditos iniciales según el plan seleccionado.
+
+#### Planes disponibles:
+- **Plan 1**: 30 créditos por $135.
+- **Plan 2**: 40 créditos por $160.
+- **Plan 3**: 60 créditos por $180.
+
+#### Ejemplo de solicitud:
+```json
+{
+  "nombre": "Nelson",
+  "plan": 1
+}
+```
+
+#### Ejemplo de respuesta:
+```json
+{
+  "mensaje": "Cliente registrado exitosamente con 30 créditos por $135",
+  "cliente": {
+    "id": "REEMPLAZAR_ID_CLIENTE",
+    "nombre": "Nelson",
+    "creditos": 30
+  }
+}
+```
+
+---
+
 ### ✉️ Registrar envío
 **POST `/api/envio`**  
 Registra un envío asociado a un cliente y un producto. Este endpoint descuenta créditos del cliente según el peso del producto.
