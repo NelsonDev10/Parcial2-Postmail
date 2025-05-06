@@ -10,7 +10,8 @@ Este proyecto consiste en una API REST para la gestión de envíos postales. Uti
 2. Ejecuta:
 
 ```bash
-npm install
+npm init -y
+npm install express mongoose dotenv
 ```
 
 3. Asegúrate de tener un archivo `.env` con tu conexión de MongoDB Atlas, por ejemplo:
