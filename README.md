@@ -16,7 +16,7 @@ npm install
 3. Asegúrate de tener un archivo `.env` con tu conexión de MongoDB Atlas, por ejemplo:
 
 ```env
-MONGODB_URI=mongodb+srv://nelsonjr:c4BXfQCk6AKc0VG8@cluster0.dwrj6n0.mongodb.net/Postmail?retryWrites=true&w=majority&appName=Cluster0
+MONGODB_URI=mongodb+srv://usuario:contraseña@cluster.mongodb.net/Postmail?retryWrites=true&w=majority
 PORT=3000
 ```
 
@@ -30,67 +30,16 @@ node app.js
 
 ## 📡 Endpoints disponibles
 
-### 🧍 Crear cliente con créditos
-**POST `/api/cliente`**  
-Registra un cliente con créditos iniciales según el plan seleccionado.
-
-#### Planes disponibles:
-- **Plan 1**: 30 créditos por $135.
-- **Plan 2**: 40 créditos por $160.
-- **Plan 3**: 60 créditos por $180.
-
-#### Ejemplo de solicitud:
-```json
-{
-  "nombre": "Nelson",
-  "plan": 1
-}
-```
-
-#### Ejemplo de respuesta:
-```json
-{
-  "mensaje": "Cliente registrado exitosamente con 30 créditos por $135",
-  "cliente": {
-    "id": "REEMPLAZAR_ID_CLIENTE",
-    "nombre": "Nelson",
-    "creditos": 30
-  }
-}
-```
-
----
-
-### 📦 Registrar producto
-**POST `/api/producto`**  
-Registra un nuevo producto disponible para envío.
-
-#### Ejemplo de solicitud:
-```json
-{
-  "descripcion": "Libro de programación",
-  "peso": 1.5,
-  "bultos": 1,
-  "fechaEntrega": "2025-05-10"
-}
-```
-
-#### Ejemplo de respuesta:
-```json
-{
-  "id": "REEMPLAZAR_ID_PRODUCTO",
-  "descripcion": "Libro de programación",
-  "peso": 1.5,
-  "bultos": 1,
-  "fechaEntrega": "2025-05-10"
-}
-```
-
----
-
 ### ✉️ Registrar envío
 **POST `/api/envio`**  
 Registra un envío asociado a un cliente y un producto. Este endpoint descuenta créditos del cliente según el peso del producto.
+
+#### Lógica de créditos:
+- Si el peso del producto es menor o igual a **3 lb**, se descuenta **1 crédito**.
+- Si el peso del producto sobrepasa las **3 lb**, se cobra el doble de créditos por cada 3 lb adicionales:
+  - **3-6 lb**: 2 créditos.
+  - **6-9 lb**: 3 créditos.
+  - Y así sucesivamente.
 
 #### Ejemplo de solicitud:
 ```json
@@ -116,7 +65,9 @@ Registra un envío asociado a un cliente y un producto. Este endpoint descuenta 
   "telefono": "12345678",
   "referencia": "Casa azul",
   "observacion": "Entregar en la mañana",
-  "costoEnvio": 5
+  "pesoProducto": 7.5,
+  "costoEnvio": 3, // Créditos descontados
+  "creditosRestantes": 27
 }
 ```
 
@@ -130,7 +81,7 @@ Consulta cuántos créditos le quedan a un cliente.
 ```json
 {
   "clienteId": "REEMPLAZAR_ID_CLIENTE",
-  "creditos": 30
+  "creditos": 27
 }
 ```
 
@@ -150,7 +101,8 @@ Lista todos los envíos realizados por un cliente.
     "telefono": "12345678",
     "referencia": "Casa azul",
     "observacion": "Entregar en la mañana",
-    "costoEnvio": 5
+    "pesoProducto": 7.5,
+    "costoEnvio": 3
   }
 ]
 ```
